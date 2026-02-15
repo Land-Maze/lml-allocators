@@ -25,13 +25,14 @@ namespace lml
 
 		void* alloc(const size_t size, const int alignment)
 		{
-			void* ptr = this->buffer + this->offset;
-			offset += size;
-			offset = (offset + (alignment - 1)) & (~(alignment - 1));
-#ifndef LML_TESTING
-			assert(offset <= this->size);
-#endif
-			return ptr;
+			const uintptr_t current_ptr = reinterpret_cast<uintptr_t>(buffer) + offset;
+
+			const uintptr_t aligned_ptr = (current_ptr + (alignment - 1)) & ~(alignment - 1);
+
+			const size_t next_offset = (aligned_ptr - reinterpret_cast<uintptr_t>(buffer)) + size;
+			assert(next_offset <= this->size);
+			this->offset = next_offset;
+			return reinterpret_cast<void*>(aligned_ptr);
 		}
 
 		void reset()

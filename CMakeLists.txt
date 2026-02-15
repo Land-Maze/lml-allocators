@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.22)
-project(Allocators CXX)
+project(lml_allocators LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# FIXME: Fix naming and provide better cmake modularity
-add_library(LML_Allocators INTERFACE)
-target_include_directories(LML_Allocators INTERFACE .)
+add_library(allocators INTERFACE)
+add_library(lml::allocators ALIAS allocators)
 
-add_executable(Test main.cpp)
-target_link_libraries(Test PRIVATE LML_Allocators)target_include_directories(allocators INTERFACE
+target_include_directories(allocators INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>
 )
